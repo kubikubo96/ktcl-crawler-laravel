@@ -8,6 +8,28 @@ namespace App\Helpers;
 class Helper
 {
 
+//    public static function generateIDPost()
+//    {
+//        $number = rand(100000000000000, 999999999999999);
+//
+//        if (WPPost::find($number)) {
+//            return self::generateIDPost();
+//        }
+//
+//        return $number;
+//    }
+//
+//    public static function generateIDTermTaxonomy()
+//    {
+//        $number = rand(100000000000000, 999999999999999);
+//
+//        if (DB::table('wp_term_taxonomy')->where('term_taxonomy_id', $number)->first()) {
+//            return self::generateIDPost();
+//        }
+//
+//        return $number;
+//    }
+
     public static function viToEn($str)
     {
         $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", "a", $str);
