@@ -99,7 +99,12 @@ class Helper
         $string = str_replace("!", " ", $string);
         $string = str_replace("-", " ", $string);
         $string = str_replace("–", " ", $string);
-        $string = substr($string, 0, 55);
+
+        $length = strlen($string);
+        if ($length <= 55) {
+            $length = 55;
+        }
+        $string = substr($string, 0, $length);
 
         return $string;
     }
