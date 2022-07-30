@@ -124,6 +124,8 @@ class WPPostController extends Controller
                 }
             }
 
+
+
             return Response::success($post);
         } catch (Exception $e) {
             TelegramService::sendError($e);
