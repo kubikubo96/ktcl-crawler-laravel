@@ -13,6 +13,7 @@ use App\Services\TelegramService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class WPPostController extends Controller
 {
@@ -84,6 +85,31 @@ class WPPostController extends Controller
                 return Response::error();
             }
 
+            $data_yoast_indexable = [
+                'object_id' => $post['ID'],
+                'object_type' => 'post',
+                'object_sub_type' => 'post',
+                'author_id' => 1,
+                'post_parent' => 0,
+                'title' => Helper::handleKeySeo($payload['title']),
+                'description' => $payload['seo_tag_description'],
+                'post_status' => 'private',
+                'primary_focus_keyword' => Helper::handleKeySeo($payload['title']),
+            ];
+            DB::table('wp_yoast_indexable')->insert($data_yoast_indexable);
+
+            $data_postmeta[] = [
+                'post_id' => $post['ID'],
+                'meta_key' => '_yoast_wpseo_focuskw',
+                'meta_value' => Helper::handleKeySeo($payload['title']),
+            ];
+            $data_postmeta[] = [
+                'post_id' => $post['ID'],
+                'meta_key' => '_yoast_wpseo_metadesc',
+                'meta_value' => $payload['seo_tag_description'],
+            ];
+            DB::table('wp_postmeta')->insert($data_postmeta);
+
             if (!empty($payload['tag'])) {
                 foreach ($payload['tag'] as $tag) {
                     $tag = ucfirst(strtolower($tag));
@@ -123,8 +149,6 @@ class WPPostController extends Controller
                     TermRelation::create($data_term_relationship);
                 }
             }
-
-
 
             return Response::success($post);
         } catch (Exception $e) {

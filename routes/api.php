@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('posts', \App\Http\Controllers\PostController::class);
 Route::resource('posts-crawl', \App\Http\Controllers\WPPostController::class);
+Route::post('test', [\App\Http\Controllers\WPPostController::class, 'test']);

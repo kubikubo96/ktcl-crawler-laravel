@@ -55,4 +55,52 @@ class Helper
 
         return $text;
     }
+
+    public static function handleKeySeo($string)
+    {
+        $string = str_replace("“", "", $string);
+        $string = str_replace("”", "", $string);
+        $string = str_replace("'", "", $string);
+        $string = str_replace('"', "", $string);
+        $string = str_replace("/", " ", $string);
+        $string = str_replace("\\", " ", $string);
+        $string = str_replace("~", " ", $string);
+        $string = str_replace("|", " ", $string);
+        $string = str_replace("@", " ", $string);
+        $string = str_replace("$", " ", $string);
+        $string = str_replace("&", " ", $string);
+        $string = str_replace("^", " ", $string);
+        $string = str_replace("*", " ", $string);
+        $string = str_replace("-", " ", $string);
+        $string = str_replace("+", " ", $string);
+        $string = str_replace(":", " ", $string);
+        $string = str_replace("    ", " ", $string);
+        $string = str_replace("   ", " ", $string);
+        $string = str_replace("  ", " ", $string);
+        $string = str_replace("=", " ", $string);
+        $string = str_replace("(", "", $string);
+        $string = str_replace(")", "", $string);
+        $string = str_replace("`", " ", $string);
+        $string = str_replace("#", " ", $string);
+        $string = str_replace("%", " ", $string);
+        $string = str_replace("^", " ", $string);
+        $string = str_replace("_", " ", $string);
+        $string = str_replace("[", " ", $string);
+        $string = str_replace("]", " ", $string);
+        $string = str_replace("{", " ", $string);
+        $string = str_replace("}", " ", $string);
+        $string = str_replace(";", " ", $string);
+        $string = str_replace("'", " ", $string);
+        $string = str_replace(",", " ", $string);
+        $string = str_replace(".", " ", $string);
+        $string = str_replace("<", " ", $string);
+        $string = str_replace(">", " ", $string);
+        $string = str_replace("?", " ", $string);
+        $string = str_replace("!", " ", $string);
+        $string = str_replace("-", " ", $string);
+        $string = str_replace("–", " ", $string);
+        $string = substr($string, 0, 55);
+
+        return $string;
+    }
 }
