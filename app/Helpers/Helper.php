@@ -74,9 +74,6 @@ class Helper
         $string = str_replace("-", " ", $string);
         $string = str_replace("+", " ", $string);
         $string = str_replace(":", " ", $string);
-        $string = str_replace("    ", " ", $string);
-        $string = str_replace("   ", " ", $string);
-        $string = str_replace("  ", " ", $string);
         $string = str_replace("=", " ", $string);
         $string = str_replace("(", "", $string);
         $string = str_replace(")", "", $string);
@@ -99,13 +96,24 @@ class Helper
         $string = str_replace("!", " ", $string);
         $string = str_replace("-", " ", $string);
         $string = str_replace("–", " ", $string);
+        $string = str_replace("    ", " ", $string);
+        $string = str_replace("   ", " ", $string);
+        $string = str_replace("  ", " ", $string);
 
-        $length = strlen($string);
-        if ($length <= 55) {
-            $length = 55;
+        $index = 60;
+        if (strlen($string) < $index) {
+            $index = strlen($string);
         }
-        $string = substr($string, 0, $length);
+        return self::subStringWhileSpace($string, $index);
+    }
 
-        return $string;
+    public static function subStringWhileSpace($string, $index)
+    {
+        $temp_string = substr($string, 0, $index);
+        if ($string[$index] != ' ') {
+            return self::subStringWhileSpace($string, $index - 1);
+        } else {
+            return $temp_string;
+        }
     }
 }
