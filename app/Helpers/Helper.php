@@ -102,7 +102,7 @@ class Helper
 
         $index = 60;
         if (strlen($string) < $index) {
-            $index = strlen($string);
+            $index = strlen($string) - 1;
         }
         return self::subStringWhileSpace($string, $index);
     }
