@@ -7,29 +7,6 @@ namespace App\Helpers;
  */
 class Helper
 {
-
-//    public static function generateIDPost()
-//    {
-//        $number = rand(100000000000000, 999999999999999);
-//
-//        if (WPPost::find($number)) {
-//            return self::generateIDPost();
-//        }
-//
-//        return $number;
-//    }
-//
-//    public static function generateIDTermTaxonomy()
-//    {
-//        $number = rand(100000000000000, 999999999999999);
-//
-//        if (DB::table('wp_term_taxonomy')->where('term_taxonomy_id', $number)->first()) {
-//            return self::generateIDPost();
-//        }
-//
-//        return $number;
-//    }
-
     public static function viToEn($str)
     {
         $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", "a", $str);
@@ -49,5 +26,33 @@ class Helper
         $str = str_replace(" ", "-", str_replace("&*#39;", "", $str));
 
         return strtolower($str);
+    }
+
+    public static function makeSlug($text, string $divider = '-')
+    {
+        $text = self::viToEn($text);
+        // replace non letter or digits by divider
+        $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
+
+        // transliterate
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+        // remove unwanted characters
+        $text = preg_replace('~[^-\w]+~', '', $text);
+
+        // trim
+        $text = trim($text, $divider);
+
+        // remove duplicate divider
+        $text = preg_replace('~-+~', $divider, $text);
+
+        // lowercase
+        $text = strtolower($text);
+
+        if (empty($text)) {
+            return 'n-a';
+        }
+
+        return $text;
     }
 }

@@ -33,5 +33,6 @@ class WPPost extends Model
         'post_type',
         'post_mime_type',
         'comment_count',
+        'url_crawl',
     ];
 }

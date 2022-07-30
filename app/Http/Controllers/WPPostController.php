@@ -7,6 +7,7 @@ use App\Helpers\Response;
 use App\Models\Term;
 use App\Models\TermRelation;
 use App\Models\TermTaxonomy;
+use App\Models\WPPost;
 use App\Repositories\WPPostRepository;
 use App\Services\TelegramService;
 use Exception;
@@ -46,8 +47,12 @@ class WPPostController extends Controller
         if (empty($request->input('content'))) {
             return Response::error('EMPTY_CONTENT');
         }
+        $post = WPPost::where('url_crawl', $request->url_crawl)->first();
+        if ($post) {
+            return Response::success();
+        }
+
         $payload = $request->all();
-        $payload['tag'] = ucfirst(strtolower($payload['tag']));
 
         $data['post_author'] = 1;
         $data['post_date'] = now();
@@ -59,7 +64,7 @@ class WPPostController extends Controller
         $data['comment_status'] = 'open';
         $data['ping_status'] = 'open';
         $data['post_password'] = '';
-        $data['post_name'] = Helper::viToEn($payload['title']);
+        $data['post_name'] = Helper::makeSlug($payload['title']);
         $data['to_ping'] = '';
         $data['pinged'] = '';
         $data['post_modified'] = now();
@@ -71,6 +76,7 @@ class WPPostController extends Controller
         $data['post_type'] = 'post';
         $data['post_mime_type'] = '';
         $data['comment_count'] = 0;
+        $data['url_crawl'] = $payload['url_crawl'];
 
         try {
             $post = $this->postRepo->create($data);
@@ -78,40 +84,45 @@ class WPPostController extends Controller
                 return Response::error();
             }
 
-            //term
-            $term = Term::where('name', $payload['tag'])->first();
-            if (!$term) {
-                $data_term = [
-                    'name' => $payload['tag'],
-                    'slug' => Helper::viToEn($payload['tag']),
-                    'term_group' => 0,
-                ];
-                $term = Term::create($data_term);
-                $term = Term::where('name', $term['name'])->first();
+            if (!empty($payload['tag'])) {
+                foreach ($payload['tag'] as $tag) {
+                    $tag = ucfirst(strtolower($tag));
+
+                    //term
+                    $term = Term::where('name', $tag)->first();
+                    if (!$term) {
+                        $data_term = [
+                            'name' => $tag,
+                            'slug' => Helper::viToEn($tag),
+                            'term_group' => 0,
+                        ];
+                        $term = Term::create($data_term);
+                        $term = Term::where('name', $term['name'])->first();
+                    }
+
+                    //term_taxonomy
+                    $term_taxonomy = TermTaxonomy::where('term_id', $term['term_id'])->where('taxonomy', 'post_tag')->first();
+                    if (!$term_taxonomy) {
+                        $data_term_taxonomy = [
+                            'term_id' => $term['term_id'],
+                            'taxonomy' => 'post_tag',
+                            'description' => '',
+                            'parent' => 0,
+                            'count' => 0,
+                        ];
+                        TermTaxonomy::create($data_term_taxonomy);
+                        $term_taxonomy = TermTaxonomy::where('term_id', $term['term_id'])->where('taxonomy', 'post_tag')->first();
+                    }
+
+                    //term_relationship
+                    $data_term_relationship = [
+                        'object_id' => $post['ID'],
+                        'term_taxonomy_id' => $term_taxonomy['term_taxonomy_id'],
+                        'term_order' => 0,
+                    ];
+                    TermRelation::create($data_term_relationship);
+                }
             }
-
-
-            $term_taxonomy = TermTaxonomy::where('term_id', $term['term_id'])->where('taxonomy', 'post_tag')->first();
-            //term_taxonomy
-            $data_term_taxonomy = [
-                'term_id' => $term['term_id'],
-                'taxonomy' => 'post_tag',
-                'description' => '',
-                'parent' => 0,
-                'count' => 0,
-            ];
-            if (!$term_taxonomy) {
-                TermTaxonomy::create($data_term_taxonomy);
-                $term_taxonomy = TermTaxonomy::where('term_id', $term['term_id'])->where('taxonomy', 'post_tag')->first();
-            }
-
-            //term_relationship
-            $data_term_relationship = [
-                'object_id' => $post['ID'],
-                'term_taxonomy_id' => $term_taxonomy['term_taxonomy_id'],
-                'term_order' => 0,
-            ];
-            TermRelation::create($data_term_relationship);
 
             return Response::success($post);
         } catch (Exception $e) {
