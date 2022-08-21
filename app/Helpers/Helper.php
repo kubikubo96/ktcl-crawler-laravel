@@ -100,20 +100,33 @@ class Helper
         $string = str_replace("   ", " ", $string);
         $string = str_replace("  ", " ", $string);
 
-        $index = 60;
-        if (strlen($string) < $index) {
-            $index = strlen($string) - 1;
+        try {
+            $index = 60;
+            if (strlen($string) < $index) {
+                $index = strlen($string) - 1;
+            }
+        } catch (\Exception $e) {
+            $index = strlen($string);
         }
-        return self::subStringWhileSpace($string, $index);
+        return self::subStringWhileSpace($string, $index, strlen($string));
     }
 
-    public static function subStringWhileSpace($string, $index)
+    public static function subStringWhileSpace($string, $index, $length)
     {
-        $temp_string = substr($string, 0, $index);
-        if ($string[$index] != ' ') {
-            return self::subStringWhileSpace($string, $index - 1);
-        } else {
-            return $temp_string;
+        try {
+            $temp_string = substr($string, 0, $index);
+            if ($string[$index] != ' ') {
+                return self::subStringWhileSpace($string, $index - 1, $length);
+            } else {
+                return $temp_string;
+            }
+        } catch (\Exception $e) {
+            $temp_string = substr($string, 0, $length - 1);
+            if ($string[$index] != ' ') {
+                return self::subStringWhileSpace($string, $index - 1, $length);
+            } else {
+                return $temp_string;
+            }
         }
     }
 }
