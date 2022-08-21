@@ -102,7 +102,7 @@ class Helper
 
         try {
             $index = 60;
-            if (strlen($string) < $index) {
+            if (strlen($string) <= $index) {
                 $index = strlen($string) - 1;
             }
         } catch (\Exception $e) {
