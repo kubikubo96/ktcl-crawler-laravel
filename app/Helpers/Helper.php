@@ -106,7 +106,7 @@ class Helper
                 $index = strlen($string) - 1;
             }
         } catch (\Exception $e) {
-            $index = strlen($string);
+            $index = strlen($string) - 1;
         }
         return self::subStringWhileSpace($string, $index, strlen($string));
     }
