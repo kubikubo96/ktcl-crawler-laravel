@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\WPPost;
-use App\Repositories\WPPostRepository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +12,7 @@ class ConvertCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'convert:post';
+    protected $signature = 'convert:data';
 
     /**
      * The console command description.
@@ -40,6 +38,16 @@ class ConvertCommand extends Command
      */
     public function handle()
     {
+        $table = 'wp_yoast_indexable';
+
+        DB::table($table)->orderBy('id')->chunk(100, function ($data) use ($table) {
+            foreach ($data as $item) {
+                $new_url = str_replace("https://kungfucongnghe.com", "http://localhost/develop/kungfucongnghe", $item->permalink);
+                DB::table($table)->where('id', $item->id)->update(['permalink' => $new_url]);
+                dump("DONE: " . $new_url);
+            }
+        });
+
         return "SUCCESS";
     }
 }
