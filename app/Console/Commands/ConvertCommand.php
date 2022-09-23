@@ -38,12 +38,12 @@ class ConvertCommand extends Command
      */
     public function handle()
     {
-        $table = 'wp_yoast_indexable';
+        $table = 'wp_yoast_seo_links';
 
         DB::table($table)->orderBy('id')->chunk(100, function ($data) use ($table) {
             foreach ($data as $item) {
-                $new_url = str_replace("https://kungfucongnghe.com", "http://localhost/develop/kungfucongnghe", $item->permalink);
-                DB::table($table)->where('id', $item->id)->update(['permalink' => $new_url]);
+                $new_url = str_replace("https://kungfucongnghe.com", "http://kungfucongnghe.local", $item->url);
+                DB::table($table)->where('id', $item->id)->update(['url' => $new_url]);
                 dump("DONE: " . $new_url);
             }
         });
