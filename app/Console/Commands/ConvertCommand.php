@@ -54,12 +54,12 @@ class ConvertCommand extends Command
         /**
          * Delete private post
          */
-        /*$table = 'wp_posts';
+        $table = 'wp_posts';
 
         DB::table($table)->orderBy('id')
             ->whereNotNull('url_crawl')
             ->where('post_status', 'private')->delete();
 
-        return "SUCCESS";*/
+        return "SUCCESS";
     }
 }
