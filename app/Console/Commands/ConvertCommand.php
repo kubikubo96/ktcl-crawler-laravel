@@ -38,7 +38,10 @@ class ConvertCommand extends Command
      */
     public function handle()
     {
-        $table = 'wp_yoast_seo_links';
+        /**
+         * Update url page
+         */
+        /*$table = 'wp_yoast_seo_links';
 
         DB::table($table)->orderBy('id')->chunk(100, function ($data) use ($table) {
             foreach ($data as $item) {
@@ -46,8 +49,17 @@ class ConvertCommand extends Command
                 DB::table($table)->where('id', $item->id)->update(['url' => $new_url]);
                 dump("DONE: " . $new_url);
             }
-        });
+        });*/
 
-        return "SUCCESS";
+        /**
+         * Delete private post
+         */
+        /*$table = 'wp_posts';
+
+        DB::table($table)->orderBy('id')
+            ->whereNotNull('url_crawl')
+            ->where('post_status', 'private')->delete();
+
+        return "SUCCESS";*/
     }
 }
