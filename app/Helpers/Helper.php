@@ -58,6 +58,14 @@ class Helper
 
     public static function handleKeySeo($string)
     {
+        $string = self::removeSpecialCharacter($string);
+        $string = self::removeTrashKeySeo($string);
+
+        return $string;
+    }
+
+    public static function removeSpecialCharacter($string)
+    {
         $string = str_replace("“", "", $string);
         $string = str_replace("”", "", $string);
         $string = str_replace("'", "", $string);
@@ -96,37 +104,135 @@ class Helper
         $string = str_replace("!", " ", $string);
         $string = str_replace("-", " ", $string);
         $string = str_replace("–", " ", $string);
+        $string = str_replace("       ", " ", $string);
+        $string = str_replace("      ", " ", $string);
+        $string = str_replace("     ", " ", $string);
         $string = str_replace("    ", " ", $string);
         $string = str_replace("   ", " ", $string);
         $string = str_replace("  ", " ", $string);
 
-        try {
-            $index = 60;
-            if (strlen($string) <= $index) {
-                $index = strlen($string) - 1;
-            }
-        } catch (\Exception $e) {
-            $index = strlen($string) - 1;
-        }
-        return self::subStringWhileSpace($string, $index, strlen($string));
+        return $string;
     }
 
-    public static function subStringWhileSpace($string, $index, $length)
+    public static function removeTrashKeySeo($string)
     {
-        try {
-            $temp_string = substr($string, 0, $index);
-            if ($string[$index] != ' ') {
-                return self::subStringWhileSpace($string, $index - 1, $length);
-            } else {
-                return $temp_string;
-            }
-        } catch (\Exception $e) {
-            $temp_string = substr($string, 0, $length - 1);
-            if ($string[$index] != ' ') {
-                return self::subStringWhileSpace($string, $index - 1, $length);
-            } else {
-                return $temp_string;
+        $trashes = [
+            '[Tip Android]',
+            '[Tip iOS]',
+            'Tip Android',
+            'Tip iOS',
+            '[Mẹo]',
+            '[Video]',
+            '[Có thể bạn chưa biết]',
+            'nhanh – gọn – lẹ',
+            'Nhanh – Gọn – Lẹ',
+            'NHANH – GỌN – LẸ',
+            'cực tiện lợi không phải ai cũng biết',
+            'Cực tiện lợi không phải ai cũng biết',
+            'không nên bỏ qua',
+            'Không nên bỏ qua',
+            'không phải ai cũng biết',
+            'Không phải ai cũng biết',
+            'toàn diện nhất',
+            'Toàn diện nhất',
+            'có thể bạn chưa biết',
+            'Có thể bạn chưa biết',
+            'cực kì đơn giản',
+            'Cực kì đơn giản',
+            'đảm bảo thành công',
+            'Đảm bảo thành công',
+            'không nên bỏ lỡ',
+            'Không nên bỏ lỡ',
+            'nhanh gọn đơn giản',
+            'Nhanh gọn đơn giản',
+            'chính xác nhất',
+            'Chính xác nhất',
+            'có gì đặc biệt',
+            'Có gì đặc biệt',
+            'một nốt nhạc',
+            'Một nốt nhạc',
+            'cực tiện lợi',
+            'Cực tiện lợi',
+            'cực đơn giản',
+            'Cực đơn giản',
+            'đơn giản nhất',
+            'Đơn giản nhất',
+            'siêu đơn giản',
+            'Siêu đơn giản',
+            'tiện lợi hơn',
+            'Tiện lợi hơn',
+            'hiệu quả nhất',
+            'Hiệu quả nhất',
+            'cực hữu ích',
+            'Cực hữu ích',
+            'bạn nên biết',
+            'Bạn nên biết',
+            'độc lạ',
+            'Độc lạ',
+            'mới ra mắt',
+            'Mới ra mắt',
+            'đơn giản',
+            'Đơn giản',
+            'dễ dàng',
+            'Dễ dàng',
+            'hiệu quả',
+            'Hiệu quả',
+            'nhanh chóng',
+            'Nhanh chóng',
+            'Hô biến',
+            'hô biến',
+            'cực dễ',
+            'Cực dễ',
+            'nên biết',
+            'Nên biết',
+            'nhanh gọn',
+            'Nhanh gọn',
+            'hợp lí',
+            'Hợp lí',
+        ];
+
+        foreach ($trashes as $trash) {
+            $string = str_replace($trash, '', $string);
+        }
+
+        $before = [
+            'cách' => 'cách',
+            'tính năng' => 'các tính năng',
+            'ứng dụng' => 'những ứng dụng',
+            'phần mềm' => 'những Các phần mềm',
+            'thủ thuật' => 'top thủ thuật',
+            'cách xử lý' => 'các cách xử lý',
+            'lưu ý' => 'những lưu ý',
+            'bước' => 'các bước',
+            'lý do' => 'các lý do',
+            'mẹo' => 'mẹo',
+            'bí kíp' => 'bí kíp',
+            'bí quyết' => 'bí quyết',
+            'nguyên nhân' => 'nguyên nhân',
+            'thói quen' => 'thói quen',
+            'điều' => 'những điều',
+            'tuyệt chiêu' => 'những tuyệt chiêu',
+        ];
+
+        $after = [
+            'Tổng hợp' => 'tổng hợp các',
+            'Top' => 'top các',
+        ];
+
+        foreach ($before as $key_bf => $value_bf) {
+            for ($number = 1; $number < 50; $number++) {
+                $temp_bf = $number . ' ' . $key_bf;
+                $string = str_replace($temp_bf, $value_bf, $string);
             }
         }
+
+        foreach ($after as $key_at => $value_at) {
+            for ($number = 1; $number < 50; $number++) {
+                $temp_at = $key_at . ' ' . $number;
+                $string = str_replace($temp_at, $value_at, $string);
+            }
+        }
+
+        return $string;
     }
 }

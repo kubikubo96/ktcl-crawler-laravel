@@ -34,7 +34,7 @@ class ConvertCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return string
      */
     public function handle()
     {
