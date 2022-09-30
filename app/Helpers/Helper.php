@@ -58,8 +58,8 @@ class Helper
 
     public static function handleKeySeo($string)
     {
-        $string = self::removeSpecialCharacter($string);
         $string = self::removeTrashKeySeo($string);
+        $string = self::removeSpecialCharacter($string);
 
         return $string;
     }
