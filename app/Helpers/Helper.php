@@ -212,6 +212,8 @@ class Helper
             'thói quen' => 'thói quen',
             'điều' => 'những điều',
             'tuyệt chiêu' => 'những tuyệt chiêu',
+            'Loại' => 'Loại',
+            'loại' => 'loại',
         ];
 
         $after = [
