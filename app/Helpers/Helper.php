@@ -145,6 +145,8 @@ class Helper
             'Không nên bỏ lỡ',
             'nhanh gọn đơn giản',
             'Nhanh gọn đơn giản',
+            'chính xác',
+            'Chính xác',
             'chính xác nhất',
             'Chính xác nhất',
             'có gì đặc biệt',
@@ -189,8 +191,8 @@ class Helper
             'Nhanh gọn',
             'hợp lí',
             'Hợp lí',
+            'Hướng dẫn bạn',
         ];
-
         foreach ($trashes as $trash) {
             $string = str_replace($trash, '', $string);
         }
@@ -215,12 +217,6 @@ class Helper
             'Loại' => 'Loại',
             'loại' => 'loại',
         ];
-
-        $after = [
-            'Tổng hợp' => 'tổng hợp các',
-            'Top' => 'top các',
-        ];
-
         foreach ($before as $key_bf => $value_bf) {
             for ($number = 1; $number < 50; $number++) {
                 $temp_bf = $number . ' ' . $key_bf;
@@ -228,6 +224,11 @@ class Helper
             }
         }
 
+        $after = [
+            'Tổng hợp' => 'tổng hợp các',
+            'Top' => 'top các',
+            'Mách bạn' => ''
+        ];
         foreach ($after as $key_at => $value_at) {
             for ($number = 1; $number < 50; $number++) {
                 $temp_at = $key_at . ' ' . $number;
