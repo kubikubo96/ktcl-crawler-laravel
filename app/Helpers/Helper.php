@@ -220,7 +220,7 @@ class Helper
             'loại' => 'loại',
         ];
         foreach ($before as $key_bf => $value_bf) {
-            for ($number = 1; $number < 50; $number++) {
+            for ($number = 50; $number >= 1; $number--) {
                 $temp_bf = $number . ' ' . $key_bf;
                 $string = str_replace($temp_bf, $value_bf, $string);
             }
@@ -232,7 +232,7 @@ class Helper
             'Mách bạn' => ''
         ];
         foreach ($after as $key_at => $value_at) {
-            for ($number = 1; $number < 50; $number++) {
+            for ($number = 50; $number >= 1; $number--) {
                 $temp_at = $key_at . ' ' . $number;
                 $string = str_replace($temp_at, $value_at, $string);
             }
