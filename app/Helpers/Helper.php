@@ -58,6 +58,7 @@ class Helper
 
     public static function handleKeySeo($string)
     {
+        $string = self::breakTitleSeo($string);
         $string = self::removeTrashKeySeo($string);
         $string = self::removeSpecialCharacter($string);
 
@@ -80,6 +81,7 @@ class Helper
         $string = str_replace("^", " ", $string);
         $string = str_replace("*", " ", $string);
         $string = str_replace("-", " ", $string);
+        $string = str_replace("–", " ", $string);
         $string = str_replace("+", " ", $string);
         $string = str_replace(":", " ", $string);
         $string = str_replace("=", " ", $string);
@@ -87,7 +89,7 @@ class Helper
         $string = str_replace(")", "", $string);
         $string = str_replace("`", " ", $string);
         $string = str_replace("#", " ", $string);
-        $string = str_replace("%", " ", $string);
+        $string = str_replace("%", " phần trăm", $string);
         $string = str_replace("^", " ", $string);
         $string = str_replace("_", " ", $string);
         $string = str_replace("[", " ", $string);
@@ -236,6 +238,31 @@ class Helper
             }
         }
 
+        return $string;
+    }
+
+    public static function breakTitleSeo($string = '')
+    {
+        $string = 'Windows 11 chính thức ra mắt với 11 tính năng thú vị. Yêu cầu hệ thống và các dòng máy được cập nhật';
+
+        $trash_words = ['(' => ')'];
+        foreach ($trash_words as $key_start => $key_end) {
+            $start_index = strpos($string, $key_start);
+            $end_index = strpos($string, $key_end);
+            if ($start_index && $end_index) {
+                $string = trim(substr($string, 0, $start_index)) . ' ' . trim(substr($string, $end_index + 1, strlen($string)));
+            }
+        }
+
+        $break_keys = [':', '?', '-', '–', '.'];
+        foreach ($break_keys as $key_brs) {
+            $index_brs = strpos($string, $key_brs);
+            if ($index_brs) {
+                if (substr($string, $index_brs + 1, 1) === ' ' || substr($string, $index_brs - 1, 1) === ' ') {
+                    $string = trim(substr($string, 0, $index_brs));
+                }
+            }
+        }
         return $string;
     }
 }
