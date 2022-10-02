@@ -241,10 +241,8 @@ class Helper
         return $string;
     }
 
-    public static function breakTitleSeo($string = '')
+    public static function breakTitleSeo($string)
     {
-        $string = 'Windows 11 chính thức ra mắt với 11 tính năng thú vị. Yêu cầu hệ thống và các dòng máy được cập nhật';
-
         $trash_words = ['(' => ')'];
         foreach ($trash_words as $key_start => $key_end) {
             $start_index = strpos($string, $key_start);
