@@ -207,9 +207,19 @@ class Helper
             'thủ thuật' => 'top thủ thuật',
             'cách xử lý' => 'các cách xử lý',
             'lưu ý' => 'những lưu ý',
+            'Lưu ý' => 'những lưu ý',
             'bước' => 'các bước',
             'lý do' => 'các lý do',
             'mẹo' => 'mẹo',
+            'Mẹo' => 'mẹo',
+            'tính năng' => 'tính năng',
+            'Tính năng' => 'tính năng',
+            'tác dụng' => 'tác dụng',
+            'Tác dụng' => 'tác dụng',
+            'tác dụng' => 'tác dụng',
+            'Tác dụng' => 'Tác dụng',
+            'chi tiết' => 'chi tiết',
+            'Chi tiết' => 'chi tiết',
             'bí kíp' => 'bí kíp',
             'bí quyết' => 'bí quyết',
             'nguyên nhân' => 'nguyên nhân',
@@ -243,23 +253,52 @@ class Helper
 
     public static function breakTitleSeo($string)
     {
-        $trash_words = ['(' => ')', '[' => ']'];
-        foreach ($trash_words as $key_start => $key_end) {
-            $start_index = strpos($string, $key_start);
-            $end_index = strpos($string, $key_end);
-            if ($start_index && $end_index) {
-                $string = trim(substr($string, 0, $start_index)) . ' ' . trim(substr($string, $end_index + 1, strlen($string)));
-            }
-        }
-
-        $break_keys = [':', '?', '-', '–', '.'];
-        foreach ($break_keys as $key_brs) {
-            $index_brs = strpos($string, $key_brs);
-            if ($index_brs) {
-                if (substr($string, $index_brs + 1, 1) === ' ' || substr($string, $index_brs - 1, 1) === ' ') {
-                    $string = trim(substr($string, 0, $index_brs));
+        try {
+            $trash_words = ['(' => ')', '[' => ']'];
+            foreach ($trash_words as $key_start => $key_end) {
+                $start_index = strpos($string, $key_start);
+                $end_index = strpos($string, $key_end);
+                if ($start_index && $end_index) {
+                    try {
+                        $string = trim(substr($string, 0, $start_index)) . ' ' . trim(substr($string, $end_index + 1, strlen($string)));
+                    } catch (\Exception $e) {
+                        echo " -- ";
+                        echo "ERROR: " . $e->getMessage();
+                        echo " -- ";
+                    }
                 }
             }
+
+            $break_keys = [':', '?', '-', '–', '.'];
+            foreach ($break_keys as $key_brs) {
+                $index_brs = strpos($string, $key_brs);
+                if ($index_brs) {
+                    if (substr($string, $index_brs + 1, 1) === ' ' || substr($string, $index_brs - 1, 1) === ' ') {
+                        if ($index_brs >= 20) {
+                            try {
+                                $string = trim(substr($string, 0, $index_brs));
+                            } catch (\Exception $e) {
+                                echo " -- ";
+                                echo "ERROR: " . $e->getMessage();
+                                echo " -- ";
+                            }
+                        } else {
+                            try {
+                                $string = trim(substr($string, $index_brs + 1, strlen($string)));
+                            } catch (\Exception $e) {
+                                echo " -- ";
+                                echo "ERROR: " . $e->getMessage();
+                                echo " -- ";
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            echo " -- ";
+            echo "ERROR: " . $e->getMessage();
+            echo " -- ";
+            return $string;
         }
         return $string;
     }

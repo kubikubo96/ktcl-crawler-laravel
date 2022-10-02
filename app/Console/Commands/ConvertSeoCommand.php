@@ -50,23 +50,33 @@ class ConvertSeoCommand extends Command
                         'title' => Helper::handleKeySeo($post->post_title),
                         'primary_focus_keyword' => Helper::handleKeySeo($post->post_title),
                     ];
-                    DB::table('wp_yoast_indexable')->where(
-                        [
-                            ['object_id', $post->ID],
-                            ['object_type', 'post'],
-                            ['object_sub_type', 'post'],
-                        ]
-                    )->update($data_yoast_indexable);
 
-                    $data_postmeta = [
-                        'meta_value' => Helper::handleKeySeo($post->post_title),
-                    ];
-                    DB::table('wp_postmeta')->where(
-                        [
-                            ['post_id', $post->ID],
-                            ['meta_key', '_yoast_wpseo_focuskw']
-                        ]
-                    )->update($data_postmeta);
+                    try {
+                        DB::beginTransaction();
+                        DB::table('wp_yoast_indexable')->where(
+                            [
+                                ['object_id', $post->ID],
+                                ['object_type', 'post'],
+                                ['object_sub_type', 'post'],
+                            ]
+                        )->update($data_yoast_indexable);
+
+                        $data_postmeta = [
+                            'meta_value' => Helper::handleKeySeo($post->post_title),
+                        ];
+                        DB::table('wp_postmeta')->where(
+                            [
+                                ['post_id', $post->ID],
+                                ['meta_key', '_yoast_wpseo_focuskw']
+                            ]
+                        )->update($data_postmeta);
+                        DB::commit();
+                    } catch (\Exception $e) {
+                        DB::rollBack();
+                        echo " -- ";
+                        echo "ERROR: " . $e->getMessage();
+                        echo " -- ";
+                    }
 
                     dump(Helper::handleKeySeo($post->post_title) . ' - ' . $post->ID . "\n");
                 }
