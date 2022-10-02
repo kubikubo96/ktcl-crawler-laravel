@@ -68,7 +68,7 @@ class ConvertSeoCommand extends Command
                         ]
                     )->update($data_postmeta);
 
-                    dump(Helper::handleKeySeo($post->post_title) . "\n");
+                    dump(Helper::handleKeySeo($post->post_title) . ' - ' . $post->ID . "\n");
                 }
             });
         return "SUCCESS";

@@ -243,7 +243,7 @@ class Helper
 
     public static function breakTitleSeo($string)
     {
-        $trash_words = ['(' => ')'];
+        $trash_words = ['(' => ')', '[' => ']'];
         foreach ($trash_words as $key_start => $key_end) {
             $start_index = strpos($string, $key_start);
             $end_index = strpos($string, $key_end);
